@@ -34,7 +34,12 @@ class Converter(object):
     def run(self):
         self.save(self.convert())
 
-    def convert(self):
+    def convert(self, target_fields=None):
+        """
+        データの変換を行う
+        :type target_fields: list
+        :rtype: list of dict
+        """
         self.echo('load sheet start')
         start_at = datetime.datetime.now()
         sheet = self.config.get_sheet()
@@ -55,7 +60,7 @@ class Converter(object):
             if i < self.config.data_start_row_index:
                 continue
 
-            _data.append(self.convert_column(row))
+            _data.append(self.convert_column(row, target_fields=target_fields))
 
             # 処理行数
             count += 1
@@ -71,12 +76,16 @@ class Converter(object):
         self.config.save(data)
         self.echo('save end', start_at=start_at)
 
-    def convert_column(self, row):
+    def convert_column(self, row, target_fields=None):
         result = {}
         for i, value in enumerate(row):
             converter = self.config.get_converter(
                 self._column_name_index_map[i])
             if not converter:
+                continue
+
+            if target_fields and converter.fieldname not in target_fields:
+                # 変換対象指定がある場合で対象外
                 continue
 
             result[converter.fieldname] = converter.to_python(value)
