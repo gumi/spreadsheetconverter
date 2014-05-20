@@ -1,0 +1,30 @@
+target: "xls:///in.xlsx#ダミーシート"
+row: 5
+limit: 10
+handler:
+  path: out.json
+  type: json
+fields:
+- column: id
+  name: "連番"
+  type: int
+
+- column: family_name
+  name: "姓"
+  type: char
+
+- column: first_name
+  name: "名"
+  type: char
+
+- column: birthday
+  name: "生年月日"
+  type: datetime
+
+- column: preference_id
+  name: "出身地"
+  type: foreignkey
+  relation:
+    column: id
+    from: 'preference.yaml'
+    key: name
