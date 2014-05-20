@@ -11,7 +11,6 @@ class Converter(object):
 
     def __init__(self, config, quiet=False):
         """
-        :type config: Config
         :param quiet: 処理状況を出力しない
         :type quiet: bool
         """

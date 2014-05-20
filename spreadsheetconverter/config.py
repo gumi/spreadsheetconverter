@@ -1,6 +1,9 @@
 # -*- coding:utf-8 -*-
 from __future__ import absolute_import
 from __future__ import unicode_literals
+import codecs
+import six
+import yaml
 from .loader import get_loader
 from .handler import get_handler
 
@@ -95,3 +98,18 @@ class Config(object):
                 entity[key] = formatter.format(value)
 
         self.handler.save(data)
+
+
+class YamlConfig(Config):
+    def __init__(self, yaml_path):
+        f = codecs.open(yaml_path, 'r', 'utf8').read()
+        rules = yaml.load(f)
+
+        # relation指定のfromを再読み込み
+        for entity in rules['fields']:
+            if 'relation' in entity:
+                if isinstance(entity['relation']['from'], six.text_type):
+                    entity['relation']['from'] = YamlConfig(
+                        entity['relation']['from'])
+
+        super().__init__(rules)
