@@ -1,8 +1,6 @@
 # -*- coding:utf-8 -*-
 from __future__ import absolute_import
 from __future__ import unicode_literals
-from time import strptime
-import six
 
 import xlrd
 from xlrd.xldate import xldate_as_datetime

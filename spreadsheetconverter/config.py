@@ -108,8 +108,8 @@ class YamlConfig(Config):
         # relation指定のfromを再読み込み
         for entity in rules['fields']:
             if 'relation' in entity:
-                if isinstance(entity['relation']['from'], six.text_type):
+                if isinstance(entity['relation']['from'], six.string_types):
                     entity['relation']['from'] = YamlConfig(
                         entity['relation']['from'])
 
-        super().__init__(rules)
+        super(YamlConfig, self).__init__(rules)

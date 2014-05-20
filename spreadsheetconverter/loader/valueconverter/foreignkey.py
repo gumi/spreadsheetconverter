@@ -6,7 +6,7 @@ from .base import BaseValueConverter
 
 class ValueConverter(BaseValueConverter):
     def __init__(self, settings):
-        super().__init__(settings)
+        super(ValueConverter, self).__init__(settings)
         self._relation_data = {}
 
     def to_python(self, value):
