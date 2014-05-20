@@ -11,11 +11,30 @@ class Config(object):
         self._fields = {
             field['name']: field for field in self.rules['fields']
         }
-        self.loader = get_loader(self.rules['target'])
-        self.handler = get_handler(self.rules['handler'])
+        self._fields_column = {
+            field['column']: field for field in self.rules['fields']
+        }
+        self._loader = None
+        self._handler = None
 
         self._formatter = {}
         self._converter = {}
+
+    @property
+    def loader(self):
+        if self._loader:
+            return self._loader
+
+        self._loader = get_loader(self.rules['target'])
+        return self._loader
+
+    @property
+    def handler(self):
+        if self._handler:
+            return self._handler
+
+        self._handler = get_handler(self.rules['handler'])
+        return self._handler
 
     @property
     def header_row_index(self):
@@ -33,6 +52,17 @@ class Config(object):
         """
         return self.header_row_index + 1
 
+    @property
+    def limit(self):
+        """
+        変換の最大数
+        :rtype: int
+        """
+        if 'limit' in self.rules:
+            return self.rules['limit']
+
+        return None
+
     def get_converter(self, item):
         if item not in self._fields:
             return None
@@ -48,9 +78,20 @@ class Config(object):
         if item in self._formatter:
             return self._formatter[item]
 
-        formatter = self.handler.get_value_formatter(self._fields[item])
+        formatter = self.handler.get_value_formatter(self._fields_column[item])
         self._formatter[item] = formatter
         return formatter
 
     def get_sheet(self):
         return self.loader.sheet
+
+    def save(self, data):
+        for entity in data:
+            for key, value in entity.items():
+                formatter = self.get_formatter(key)
+                if not formatter:
+                    continue
+
+                entity[key] = formatter.format(value)
+
+        self.handler.save(data)

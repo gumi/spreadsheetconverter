@@ -2,7 +2,6 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 import importlib
-from .through import ValueFormatter as DefaultValueFormatter
 
 
 def get_value_formatter(setting):
@@ -14,4 +13,4 @@ def get_value_formatter(setting):
             'spreadsheetconverter.valueformatter.{}'.format(setting['type']))
         return loader_module.ValueFormatter(setting)
     except ImportError:
-        return DefaultValueFormatter(setting)
+        return None
