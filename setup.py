@@ -4,16 +4,9 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 from setuptools import setup, find_packages
 
-version_tuple = __import__('spreadsheetconverter').VERSION
-
-if version_tuple[3] is not None:
-    version = '{:d}.{:d}.{:d}{}'.format(*version_tuple)
-else:
-    version = '{:d}.{:d}.{:d}'.format(*version_tuple[:3])
-
 setup(
     name="SpreadsheetConverter",
-    version=version,
+    version='0.0.1',
     url='https://github.com/yamionp/spreadsheetconverter/',
     author='yamionp',
     author_email='yami@crimsondream.jp',
