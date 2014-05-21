@@ -1,4 +1,5 @@
 target: "xls:///in.xlsx#都道府県"
+name: Preference
 row: 5
 handler:
   path: out.json

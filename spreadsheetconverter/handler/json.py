@@ -8,9 +8,9 @@ from .valueformatter.string import ValueFormatter as StringValueFormatter
 
 class Handler(BaseHandler):
     def save(self, data):
-        with open(self._config['path'], 'w') as f:
-            indent = self._config.get('indent')
-            sort_keys = self._config.get('sort_keys', False)
+        with open(self.handler_config['path'], 'w') as f:
+            indent = self.handler_config.get('indent')
+            sort_keys = self.handler_config.get('sort_keys', False)
             f.write(json.dumps(data, indent=indent, sort_keys=sort_keys))
 
     def get_value_formatter(self, setting):

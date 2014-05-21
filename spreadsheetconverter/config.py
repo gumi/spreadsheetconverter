@@ -36,7 +36,7 @@ class Config(object):
         if self._handler:
             return self._handler
 
-        self._handler = get_handler(self.rules['handler'])
+        self._handler = get_handler(self.rules['handler'], self)
         return self._handler
 
     @property
