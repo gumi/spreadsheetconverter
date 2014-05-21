@@ -20,5 +20,5 @@ Installation
 
 The last stable release is available on PyPI and can be installed with ``pip``::
 
-    $ pip install spreadsheetconverter
+    $ pip install SpreadsheetConverter
 
