@@ -2,8 +2,10 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 import codecs
+
 import six
 import yaml
+
 from .loader import get_loader
 from .handler import get_handler
 from spreadsheetconverter.utils import search_path
@@ -23,6 +25,8 @@ class Config(object):
 
         self._formatter = {}
         self._converter = {}
+
+        self._column_name_index_map = {}
 
     @property
     def loader(self):
@@ -99,6 +103,48 @@ class Config(object):
                 entity[key] = formatter.format(value)
 
         self.handler.save(data)
+
+    def convert(self, sheet, target_fields=None):
+        _data = []
+        # 処理行数
+        count = 0
+        for i, row in enumerate(sheet.rows):
+            if i == self.header_row_index:
+                # タイトル行
+                self.load_header_row(row)
+                continue
+
+            if i < self.data_start_row_index:
+                continue
+
+            _data.append(self.convert_column(row, target_fields=target_fields))
+
+            # 処理行数
+            count += 1
+            if self.limit and count >= self.limit:
+                break
+
+        return _data
+
+    def convert_column(self, row, target_fields=None):
+        result = {}
+        for i, value in enumerate(row):
+            converter = self.get_converter(
+                self._column_name_index_map[i])
+            if not converter:
+                continue
+
+            if target_fields and converter.fieldname not in target_fields:
+                # 変換対象指定がある場合で対象外
+                continue
+
+            result[converter.fieldname] = converter.to_python(value)
+
+        return result
+
+    def load_header_row(self, row):
+        for i, name in enumerate(row):
+            self._column_name_index_map[i] = name
 
 
 class YamlConfig(Config):
