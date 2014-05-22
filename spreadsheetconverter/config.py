@@ -101,7 +101,11 @@ class Config(object):
 
 
 class YamlConfig(Config):
-    def __init__(self, yaml_path):
+    def __init__(self, yaml_path, load_context=None):
+        if load_context is None:
+            load_context = {}
+        load_context[yaml_path] = self
+
         f = codecs.open(yaml_path, 'r', 'utf8').read()
         rules = yaml.load(f)
 
@@ -109,7 +113,12 @@ class YamlConfig(Config):
         for entity in rules['fields']:
             if 'relation' in entity:
                 if isinstance(entity['relation']['from'], six.string_types):
-                    entity['relation']['from'] = YamlConfig(
-                        entity['relation']['from'])
+                    related_path = entity['relation']['from']
+                    if related_path not in load_context:
+                        entity['relation']['from'] = YamlConfig(
+                            related_path,
+                            load_context)
+                    else:
+                        entity['relation']['from'] = load_context[related_path]
 
         super(YamlConfig, self).__init__(rules)
