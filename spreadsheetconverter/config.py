@@ -6,6 +6,7 @@ import six
 import yaml
 from .loader import get_loader
 from .handler import get_handler
+from spreadsheetconverter.utils import search_path
 
 
 class Config(object):
@@ -106,7 +107,11 @@ class YamlConfig(Config):
             load_context = {}
         load_context[yaml_path] = self
 
-        f = codecs.open(yaml_path, 'r', 'utf8').read()
+        abs_yaml_path = search_path(
+            yaml_path,
+            path_env='SSC_YAML_SEARCH_PATH',
+            recursive_env='SSC_YAML_SEARCH_RECURSIVE')
+        f = codecs.open(abs_yaml_path, 'r', 'utf8').read()
         rules = yaml.load(f)
 
         # relation指定のfromを再読み込み
