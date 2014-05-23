@@ -1,10 +1,12 @@
 target: "xls:///in.xlsx#ダミーシート"
+name: User
 row: 5
 limit: 10
 handler:
   path: out.json
   type: json
   indent: 4
+  sort_keys: true
 fields:
 - column: id
   name: "連番"
@@ -27,5 +29,5 @@ fields:
   type: foreignkey
   relation:
     column: id
-    from: 'preference.yaml'
+    from: 'country/preference.yaml'
     key: name

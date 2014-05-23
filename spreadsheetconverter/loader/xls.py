@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import xlrd
 from xlrd.xldate import xldate_as_datetime
 
+from spreadsheetconverter.utils import search_path
 from .base import BaseLoader, BaseBook, BaseSheet
 from .valueconverter.datetime import ValueConverter as BaseDatetimeConverter
 from .valueconverter.date import ValueConverter as BaseDateConverter
@@ -35,10 +36,23 @@ class XlsDateValueConverter(BaseDateConverter):
         return super(XlsDateValueConverter, self).to_python(value)
 
 
+_BOOK_CACHE = {}
+
+
 class Loader(BaseLoader):
     def __init__(self, params):
         super(Loader, self).__init__(params)
-        self._book = Book(self._params.path[1:])
+        abs_path = search_path(
+            self._params.path[1:],
+            path_env='SSC_XLS_SEARCH_PATH',
+            recursive_env='SSC_XLS_SEARCH_RECURSIVE')
+
+        if abs_path in _BOOK_CACHE:
+            self._book = _BOOK_CACHE[abs_path]
+        else:
+            self._book = Book(abs_path)
+            _BOOK_CACHE[abs_path] = self._book
+
         self._sheet = self._book.get_sheet(self._params.fragment)
 
     @property

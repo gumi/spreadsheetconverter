@@ -10,18 +10,6 @@ except ImportError:
     from urlparse import urlparse
 
 
-def get_sheet(uri):
-    """
-
-    :type uri: string
-    """
-    parsed = urlparse(uri)
-    loader_module = importlib.import_module(
-        'spreadsheetconverter.loader.{}'.format(parsed.scheme))
-    return loader_module.Book(parsed.path[1:]).get_sheet(
-        parsed.fragment)
-
-
 def get_loader(uri):
     """
     :type uri: string

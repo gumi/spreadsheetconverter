@@ -1,8 +1,11 @@
 target: "xls:///in.xlsx#都道府県"
+name: Preference
 row: 5
 handler:
   path: out.json
   type: json
+  sort_keys: true
+  indent: 4
 fields:
 - column: id
   name: "ID"

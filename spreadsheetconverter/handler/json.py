@@ -2,15 +2,21 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 import json
+import os
 from .base import BaseHandler
 from .valueformatter.string import ValueFormatter as StringValueFormatter
 
 
 class Handler(BaseHandler):
     def save(self, data):
-        with open(self._config['path'], 'w') as f:
-            indent = self._config.get('indent')
-            sort_keys = self._config.get('sort_keys', False)
+        path = self.handler_config['path']
+        base_path = os.environ.get('SSC_JSON_BASE_PATH')
+        if base_path:
+            path = os.path.join(base_path, path)
+
+        with open(path, 'w') as f:
+            indent = self.handler_config.get('indent')
+            sort_keys = self.handler_config.get('sort_keys', False)
             f.write(json.dumps(data, indent=indent, sort_keys=sort_keys))
 
     def get_value_formatter(self, setting):
