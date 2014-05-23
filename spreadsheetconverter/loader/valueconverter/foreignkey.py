@@ -8,9 +8,20 @@ class ValueConverter(BaseValueConverter):
     def __init__(self, settings):
         super(ValueConverter, self).__init__(settings)
         self._relation_data = {}
+        self._converter = None
 
     def to_python(self, value):
-        return self.relation[value]
+        return self.relation[self.converter.to_python(value)]
+
+    @property
+    def converter(self):
+        if self._converter:
+            return self._converter
+
+        from spreadsheetconverter import Converter
+        converter = Converter(self.settings['relation']['from'])
+        self._converter = converter.config.get_converter_by_column(self.relation_field_from)
+        return self._converter
 
     @property
     def relation(self):

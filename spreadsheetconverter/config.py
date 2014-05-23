@@ -78,6 +78,9 @@ class Config(object):
         self._converter[item] = converter
         return converter
 
+    def get_converter_by_column(self, item):
+        return self.get_converter(self._fields_column[item]['name'])
+
     def get_formatter(self, item):
         if item in self._formatter:
             return self._formatter[item]
