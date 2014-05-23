@@ -5,5 +5,5 @@ from .config import Config, YamlConfig
 from .converter import Converter
 
 
-VERSION = (0, 0, 3, None)
+VERSION = (0, 0, 4, None)
 __version__ = '.'.join(map(str, VERSION))
