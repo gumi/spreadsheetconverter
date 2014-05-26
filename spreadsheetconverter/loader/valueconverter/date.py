@@ -6,10 +6,8 @@ from .base import BaseValueConverter
 
 
 class ValueConverter(BaseValueConverter):
-    def to_python(self, value):
+    def _to_python(self, value):
         try:
-            _datetime = datetime.strptime(value, '%Y/%m/%d')
+            return datetime.strptime(value, '%Y/%m/%d')
         except ValueError:
-            _datetime = datetime.strptime(value, '%Y/%m/%d %H:%M:%S')
-
-        return _datetime.date()
+            return datetime.strptime(value, '%Y/%m/%d %H:%M:%S')

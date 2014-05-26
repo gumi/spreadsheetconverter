@@ -12,6 +12,11 @@ fields:
   name: "連番"
   type: int
 
+- column: country_code
+  name: "国籍"
+  type: char
+  default: "JP"
+
 - column: family_name
   name: "姓"
   type: char

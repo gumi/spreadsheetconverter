@@ -11,8 +11,12 @@ class ValueConverter(BaseValueConverter):
         self._converter = None
         self._value_converter = None
 
-    def to_python(self, value):
-        return self.relation[self.value_converter.to_python(value)]
+    def _to_python(self, value):
+        converted = self.value_converter.to_python(value)
+        if converted not in self.relation:
+            raise ValueError
+
+        return self.relation[converted]
 
     @property
     def value_converter(self):
