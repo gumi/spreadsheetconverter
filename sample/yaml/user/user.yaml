@@ -11,6 +11,8 @@ fields:
 - column: id
   name: "連番"
   type: int
+  validate:
+    unique: true
 
 - column: country_code
   name: "国籍"
