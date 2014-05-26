@@ -13,7 +13,7 @@ except IOError:
 
 setup(
     name="SpreadsheetConverter",
-    version='0.0.4',
+    version='0.0.5',
     url='https://github.com/yamionp/spreadsheetconverter/',
     author='yamionp',
     author_email='yami@crimsondream.jp',
