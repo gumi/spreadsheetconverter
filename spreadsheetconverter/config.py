@@ -25,6 +25,7 @@ class Config(object):
 
         self._formatter = {}
         self._converter = {}
+        self._validator = {}
 
         self._column_name_index_map = {}
 
@@ -93,6 +94,14 @@ class Config(object):
         self._formatter[item] = formatter
         return formatter
 
+    def get_validators(self, item):
+        if item in self._validator:
+            return self._validator[item]
+
+        validators = self.loader.get_validators(self._fields_column[item])
+        self._validator[item] = validators
+        return validators
+
     def get_sheet(self):
         return self.loader.sheet
 
@@ -141,7 +150,15 @@ class Config(object):
                 # 変換対象指定がある場合で対象外
                 continue
 
-            result[converter.fieldname] = converter.to_python(value)
+            # convert
+            converted = converter.to_python(value)
+            result[converter.fieldname] = converted
+
+            # validate
+            validators = self.get_validators(converter.fieldname)
+            if validators:
+                for validator in validators:
+                    validator.validate(converted)
 
         return result
 

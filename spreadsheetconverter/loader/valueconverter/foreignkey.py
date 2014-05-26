@@ -9,9 +9,23 @@ class ValueConverter(BaseValueConverter):
         super(ValueConverter, self).__init__(settings)
         self._relation_data = {}
         self._converter = None
+        self._value_converter = None
 
-    def to_python(self, value):
-        return self.relation[self.converter.to_python(value)]
+    def _to_python(self, value):
+        converted = self.value_converter.to_python(value)
+        if converted not in self.relation:
+            raise ValueError
+
+        return self.relation[converted]
+
+    @property
+    def value_converter(self):
+        if self._value_converter:
+            return self._value_converter
+
+        self._value_converter = self.converter.config.get_converter_by_column(
+            self.relation_field_from)
+        return self._value_converter
 
     @property
     def converter(self):
@@ -19,8 +33,7 @@ class ValueConverter(BaseValueConverter):
             return self._converter
 
         from spreadsheetconverter import Converter
-        converter = Converter(self.settings['relation']['from'])
-        self._converter = converter.config.get_converter_by_column(self.relation_field_from)
+        self._converter = Converter(self.settings['relation']['from'])
         return self._converter
 
     @property
@@ -32,9 +45,7 @@ class ValueConverter(BaseValueConverter):
         if self._relation_data:
             return self._relation_data
 
-        from spreadsheetconverter import Converter
-        converter = Converter(self.settings['relation']['from'])
-        for entity in converter.convert(target_fields=[
+        for entity in self.converter.convert(target_fields=[
             self.relation_field_to,
             self.relation_field_from,
         ]):

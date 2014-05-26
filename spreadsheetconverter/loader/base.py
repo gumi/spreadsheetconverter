@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 from .valueconverter import get_value_converter
+from .validator import get_validators
 
 
 class BaseLoader(object):
@@ -20,6 +21,9 @@ class BaseLoader(object):
 
     def get_value_converter(self, setting):
         return get_value_converter(setting)
+
+    def get_validators(self, setting):
+        return get_validators(setting)
 
 
 class BaseBook(object):

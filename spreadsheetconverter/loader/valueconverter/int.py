@@ -5,5 +5,5 @@ from .base import BaseValueConverter
 
 
 class ValueConverter(BaseValueConverter):
-    def to_python(self, value):
+    def _to_python(self, value):
         return int(value)
