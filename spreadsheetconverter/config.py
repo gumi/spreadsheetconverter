@@ -29,6 +29,8 @@ class Config(object):
 
         self._column_name_index_map = {}
 
+        self.name = self.rules['target']
+
     @property
     def loader(self):
         if self._loader:
@@ -193,3 +195,5 @@ class YamlConfig(Config):
                         entity['relation']['from'] = load_context[related_path]
 
         super(YamlConfig, self).__init__(rules)
+
+        self.name = yaml_path

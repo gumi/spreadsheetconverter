@@ -21,7 +21,7 @@ class Converter(object):
         if self.quiet:
             return
 
-        text = '-- {}'.format(message)
+        text = '--{} {}'.format(self.config.name, message)
         if start_at:
             delta = datetime.datetime.now() - start_at
             text += ' ({}.{}s)'.format(delta.seconds, delta.microseconds)
