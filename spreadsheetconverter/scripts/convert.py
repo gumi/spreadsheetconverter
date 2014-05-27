@@ -21,7 +21,7 @@ class ConvertCommand(object):
     parser = argparse.ArgumentParser(
         description=textwrap.dedent(description)
     )
-    parser.add_argument('config', help='convert target yaml')
+    parser.add_argument('config',  nargs='+', help='convert target yaml paths')
 
     parser.add_argument('--search_path', nargs='+',
                         help='file search paths')
@@ -79,8 +79,9 @@ class ConvertCommand(object):
             os.environ.setdefault('SSC_JSON_BASE_PATH',
                                   self.args.json_base_path)
 
-        converter = Converter(YamlConfig(self.args.config))
-        converter.run()
+        for config in self.args.config:
+            converter = Converter(YamlConfig(config))
+            converter.run()
 
 
 if __name__ == '__main__':  # pragma: no cover
