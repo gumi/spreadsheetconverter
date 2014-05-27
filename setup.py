@@ -11,9 +11,15 @@ try:
 except IOError:
     readme = ''
 
+install_requires = [
+    'six >= 1.6',
+    'PyYAML>=3.11',
+    'xlrd >= 0.9.3',
+]
+
 setup(
     name="SpreadsheetConverter",
-    version='0.0.7',
+    version='0.0.8',
     url='https://github.com/yamionp/spreadsheetconverter/',
     author='yamionp',
     author_email='yami@crimsondream.jp',
@@ -23,7 +29,7 @@ setup(
     long_description=readme,
     license="MIT",
     packages=find_packages(),
-    install_requires=open('requirements.txt').read().splitlines(),
+    install_requires=install_requires,
     classifiers=[
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',

@@ -5,5 +5,4 @@ from .config import Config, YamlConfig
 from .converter import Converter
 
 
-VERSION = (0, 0, 7, None)
-__version__ = '.'.join(map(str, VERSION))
+__version__ = '0.0.8'
