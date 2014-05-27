@@ -14,7 +14,7 @@ def get_validators(setting):
     validators = []
     for validator_name in setting['validate'].keys():
         loader_module = load_module(
-            'spreadsheetconverter.handler.validator.{}',
+            'spreadsheetconverter.loader.validator.{}',
             validator_name)
         validators.append(loader_module.Validator(setting))
 
