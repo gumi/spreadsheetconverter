@@ -13,7 +13,7 @@ except IOError:
 
 setup(
     name="SpreadsheetConverter",
-    version='0.0.5',
+    version='0.0.6',
     url='https://github.com/yamionp/spreadsheetconverter/',
     author='yamionp',
     author_email='yami@crimsondream.jp',
@@ -32,5 +32,10 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: Implementation :: CPython',
         'License :: OSI Approved :: MIT License',
-    ]
+    ],
+    entry_points="""
+      # -*- Entry points: -*-
+      [console_scripts]
+      ssconvert = spreadsheetconverter.scripts.convert:main
+    """,
 )
