@@ -14,6 +14,11 @@ class Handler(BaseHandler):
         if base_path:
             path = os.path.join(base_path, path)
 
+        # 親までのディレクトリが存在しなければ作成
+        _path, _filename = os.path.split(path)
+        if not os.path.exists(_path):
+            os.makedirs(_path)
+
         with open(path, 'w') as f:
             indent = self.handler_config.get('indent')
             sort_keys = self.handler_config.get('sort_keys', False)
