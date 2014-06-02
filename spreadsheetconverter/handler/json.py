@@ -1,10 +1,22 @@
 # -*- coding:utf-8 -*-
 from __future__ import absolute_import
 from __future__ import unicode_literals
+import datetime
 import json
 import os
+
+from six import text_type
+
 from .base import BaseHandler
-from .valueformatter.string import ValueFormatter as StringValueFormatter
+from .valueformatter.base import BaseValueFormatter
+
+
+class DatetimeValueFormatter(BaseValueFormatter):
+    def format(self, value):
+        if isinstance(value, datetime.datetime):
+            return text_type(value)
+
+        return value
 
 
 class Handler(BaseHandler):
@@ -26,6 +38,6 @@ class Handler(BaseHandler):
 
     def get_value_formatter(self, setting):
         if setting['type'] == 'datetime':
-            return StringValueFormatter(setting)
+            return DatetimeValueFormatter(setting)
 
         return super(Handler, self).get_value_formatter(setting)
