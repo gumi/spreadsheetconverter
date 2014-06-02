@@ -16,11 +16,11 @@ class XlsDatetimeValueConverter(BaseDatetimeConverter):
         super(XlsDatetimeValueConverter, self).__init__(settings)
         self.date_mode = date_mode
 
-    def to_python(self, value):
+    def _to_python(self, value):
         if isinstance(value, float):
             return xlrd.xldate.xldate_as_datetime(value, self.date_mode)
 
-        return super(XlsDatetimeValueConverter, self).to_python(value)
+        return super(XlsDatetimeValueConverter, self)._to_python(value)
 
 
 class XlsDateValueConverter(BaseDateConverter):
@@ -28,12 +28,12 @@ class XlsDateValueConverter(BaseDateConverter):
         super(XlsDateValueConverter, self).__init__(settings)
         self.date_mode = date_mode
 
-    def to_python(self, value):
+    def _to_python(self, value):
         if isinstance(value, float):
             _datetime = xlrd.xldate.xldate_as_datetime(value, self.date_mode)
             return _datetime.date()
 
-        return super(XlsDateValueConverter, self).to_python(value)
+        return super(XlsDateValueConverter, self)._to_python(value)
 
 
 _BOOK_CACHE = {}
