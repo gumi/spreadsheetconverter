@@ -18,7 +18,8 @@ class XlsDatetimeValueConverter(BaseDatetimeConverter):
 
     def _to_python(self, value):
         if isinstance(value, float):
-            return xlrd.xldate.xldate_as_datetime(value, self.date_mode)
+            return self._localize(
+                xlrd.xldate.xldate_as_datetime(value, self.date_mode))
 
         return super(XlsDatetimeValueConverter, self)._to_python(value)
 

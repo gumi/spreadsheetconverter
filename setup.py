@@ -15,11 +15,13 @@ install_requires = [
     'six >= 1.6',
     'PyYAML>=3.11',
     'xlrd >= 0.9.3',
+    'pytz',
+    'python-dateutil',
 ]
 
 setup(
     name="SpreadsheetConverter",
-    version='0.0.11',
+    version='0.0.12',
     url='https://github.com/yamionp/spreadsheetconverter/',
     author='yamionp',
     author_email='yami@crimsondream.jp',
