@@ -39,6 +39,9 @@ class ConvertCommand(object):
     parser.add_argument('--json_base_path',
                         help='json file out path')
 
+    parser.add_argument('--timezone',
+                        help='default timezone')
+
     def __init__(self, argv, quiet=False):
         self.quiet = quiet
         self.args = self.parser.parse_args(argv[1:])
@@ -78,6 +81,10 @@ class ConvertCommand(object):
         if self.args.json_base_path:
             os.environ.setdefault('SSC_JSON_BASE_PATH',
                                   self.args.json_base_path)
+
+        if self.args.timezone:
+            os.environ.setdefault('SSC_TIMEZONE',
+                                  self.args.timezone)
 
         for config in self.args.config:
             converter = Converter(YamlConfig(config))
