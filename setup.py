@@ -21,7 +21,7 @@ install_requires = [
 
 setup(
     name="SpreadsheetConverter",
-    version='0.0.12',
+    version='0.0.13',
     url='https://github.com/yamionp/spreadsheetconverter/',
     author='yamionp',
     author_email='yami@crimsondream.jp',
