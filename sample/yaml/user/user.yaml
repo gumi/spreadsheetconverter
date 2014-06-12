@@ -38,3 +38,11 @@ fields:
     column: id
     from: 'country/preference.yaml'
     key: name
+
+- column: current_preference_id
+  name: "現住都道府県"
+  type: foreignkey
+  relation:
+    column: id
+    from: 'country/preference.yaml'
+    key: name

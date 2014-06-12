@@ -87,7 +87,7 @@ class ConvertCommand(object):
                                   self.args.timezone)
 
         for config in self.args.config:
-            converter = Converter(YamlConfig(config))
+            converter = Converter(YamlConfig.get_config(config))
             converter.run()
 
 
