@@ -168,10 +168,10 @@ class Config(object):
         for i, name in enumerate(row):
             self._column_name_index_map[i] = name
 
-    def has_cache(self):
+    def has_cache(self, target_fields=None):
         return False
 
-    def get_cache(self):
+    def get_cache(self, target_fields=None):
         raise NotImplementedError
 
 
@@ -206,7 +206,7 @@ class YamlConfig(Config):
         super(YamlConfig, self).__init__(rules)
 
         self.name = yaml_path
-        self._converted = None
+        self._converted = {}
 
     @classmethod
     def get_config(cls, yaml_path, **kwargs):
@@ -217,16 +217,21 @@ class YamlConfig(Config):
         return YAML_CACHE[yaml_path]
 
     def convert(self, sheet, target_fields=None):
-        if self._converted:
-            return self._converted
-
         _result = super(YamlConfig, self).convert(
             sheet, target_fields=target_fields)
-        self._converted = _result
+        self._set_cache(target_fields, _result)
         return _result
 
-    def has_cache(self):
-        return bool(self._converted)
+    def _get_cache_key(self, target_fields):
+        if target_fields is None:
+            return 'None'
+        return ':'.join(sorted(target_fields))
 
-    def get_cache(self):
-        return self._converted
+    def has_cache(self, target_fields=None):
+        return self._get_cache_key(target_fields) in self._converted
+
+    def get_cache(self, target_fields=None):
+        return self._converted[self._get_cache_key(target_fields)]
+
+    def _set_cache(self, target_fields, data):
+        self._converted[self._get_cache_key(target_fields)] = data
