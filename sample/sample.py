@@ -22,5 +22,5 @@ if __name__ == '__main__':
     os.environ.setdefault('SSC_JSON_BASE_PATH',
                           os.path.join(os.getcwd(), 'json'))
 
-    converter = Converter(YamlConfig('user/user.yaml'))
+    converter = Converter(YamlConfig.get_config('user/user.yaml'))
     converter.run()

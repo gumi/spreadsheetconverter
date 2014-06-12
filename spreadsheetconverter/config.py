@@ -168,6 +168,15 @@ class Config(object):
         for i, name in enumerate(row):
             self._column_name_index_map[i] = name
 
+    def has_cache(self):
+        return False
+
+    def get_cache(self):
+        raise NotImplementedError
+
+
+YAML_CACHE = {}
+
 
 class YamlConfig(Config):
     def __init__(self, yaml_path, load_context=None):
@@ -188,12 +197,36 @@ class YamlConfig(Config):
                 if isinstance(entity['relation']['from'], six.string_types):
                     related_path = entity['relation']['from']
                     if related_path not in load_context:
-                        entity['relation']['from'] = YamlConfig(
+                        entity['relation']['from'] = YamlConfig.get_config(
                             related_path,
-                            load_context)
+                            load_context=load_context)
                     else:
                         entity['relation']['from'] = load_context[related_path]
 
         super(YamlConfig, self).__init__(rules)
 
         self.name = yaml_path
+        self._converted = None
+
+    @classmethod
+    def get_config(cls, yaml_path, **kwargs):
+        if yaml_path in YAML_CACHE:
+            return YAML_CACHE[yaml_path]
+
+        YAML_CACHE[yaml_path] = cls(yaml_path, **kwargs)
+        return YAML_CACHE[yaml_path]
+
+    def convert(self, sheet, target_fields=None):
+        if self._converted:
+            return self._converted
+
+        _result = super(YamlConfig, self).convert(
+            sheet, target_fields=target_fields)
+        self._converted = _result
+        return _result
+
+    def has_cache(self):
+        return bool(self._converted)
+
+    def get_cache(self):
+        return self._converted

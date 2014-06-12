@@ -2,6 +2,7 @@
     {
         "birthday": "1969-09-05 00:00:00",
         "country_code": "JP",
+        "current_preference_id": 1,
         "family_name": "\u798f\u672c",
         "first_name": "\u79cb\u7537",
         "id": 1,
@@ -10,6 +11,7 @@
     {
         "birthday": "1982-05-30 00:00:00",
         "country_code": "JP",
+        "current_preference_id": 1,
         "family_name": "\u5927\u6ca2",
         "first_name": "\u5b9f\u512a",
         "id": 2,
@@ -18,6 +20,7 @@
     {
         "birthday": "1967-01-01 00:00:00",
         "country_code": "JP",
+        "current_preference_id": 7,
         "family_name": "\u6bdb\u5229",
         "first_name": "\u7dcf\u4e00\u6717",
         "id": 3,
@@ -26,6 +29,7 @@
     {
         "birthday": "1953-11-18 00:00:00",
         "country_code": "JP",
+        "current_preference_id": 7,
         "family_name": "\u4e2d\u6fa4",
         "first_name": "\u662d\u6cbb",
         "id": 4,
@@ -34,6 +38,7 @@
     {
         "birthday": "1969-04-06 00:00:00",
         "country_code": "US",
+        "current_preference_id": 40,
         "family_name": "\u5bae\u5d0e",
         "first_name": "\u514b\u5df3",
         "id": 5,
@@ -42,6 +47,7 @@
     {
         "birthday": "1982-05-30 00:00:00",
         "country_code": "US",
+        "current_preference_id": 40,
         "family_name": "\u5317\u6751",
         "first_name": "\u660c\u4fe1",
         "id": 6,
@@ -50,6 +56,7 @@
     {
         "birthday": "1920-04-08 00:00:00",
         "country_code": "JP",
+        "current_preference_id": 40,
         "family_name": "\u6c38\u4e95",
         "first_name": "\u7d17\u77e2",
         "id": 7,
@@ -58,6 +65,7 @@
     {
         "birthday": "1951-03-02 00:00:00",
         "country_code": "FR",
+        "current_preference_id": 18,
         "family_name": "\u5b89\u658e",
         "first_name": "\u5b89\u5f18",
         "id": 8,
@@ -66,6 +74,7 @@
     {
         "birthday": "1919-06-28 00:00:00",
         "country_code": "FR",
+        "current_preference_id": 18,
         "family_name": "\u77f3\u672c",
         "first_name": "\u82bd\u8863",
         "id": 9,
@@ -74,6 +83,7 @@
     {
         "birthday": "1924-11-24 00:00:00",
         "country_code": "JP",
+        "current_preference_id": 18,
         "family_name": "\u95a2\u8c37",
         "first_name": "\u6c99\u6a39",
         "id": 10,

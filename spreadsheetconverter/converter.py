@@ -37,6 +37,10 @@ class Converter(object):
         :type target_fields: list
         :rtype: list of dict
         """
+        if self.config.has_cache():
+            self.echo('hit cache')
+            return self.config.get_cache()
+
         self.echo('load sheet start')
         start_at = datetime.datetime.now()
         sheet = self.config.get_sheet()

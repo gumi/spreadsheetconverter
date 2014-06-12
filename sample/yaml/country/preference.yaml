@@ -10,6 +10,8 @@ fields:
 - column: id
   name: "ID"
   type: int
+  validate:
+    unique: true
 
 - column: name
   name: "名前"
