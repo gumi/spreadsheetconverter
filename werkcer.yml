@@ -8,6 +8,16 @@ build:
         name: setup virtual environment
         install_wheel: false # Enable wheel to speed up builds (experimental)
 
+    - script:
+        name: echo information
+        code: |
+            echo "python version $(python --version) running!"
+            echo "from location $(which python)"
+            echo -p "packages: $(pip freeze)"
+    - script:
+        name: Run pytest
+        code: pwd
+
     # # Use this virtualenv step for python 3.2
     # - virtualenv
     #     name: setup virtual environment
