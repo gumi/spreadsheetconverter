@@ -59,4 +59,4 @@ def search_path(filename, path_env=None, recursive_env=None):
         if path:
             return path
 
-    raise IOError('File does not exist.', filename)
+    raise IOError('File does not exist.', filename, search_paths, recursive)
