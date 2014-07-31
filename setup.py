@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 from __future__ import absolute_import
 from __future__ import unicode_literals
+import os
 from setuptools import setup, find_packages
 
 
@@ -11,17 +12,21 @@ try:
 except IOError:
     readme = ''
 
-install_requires = [
-    'six >= 1.6',
-    'PyYAML>=3.11',
-    'xlrd >= 0.9.3',
-    'pytz',
-    'python-dateutil',
-]
+# requirements
+install_requires = open('requirements.txt').read().splitlines()
+
+# version
+here = os.path.dirname(os.path.abspath(__file__))
+version = next((line.split('=')[1].strip().replace("'", '')
+                for line in open(os.path.join(here,
+                                              'spreadsheetconverter',
+                                              '__init__.py'))
+                if line.startswith('__version__ = ')),
+               '0.0.dev0')
 
 setup(
     name="SpreadsheetConverter",
-    version='0.0.15',
+    version=version,
     url='https://github.com/yamionp/spreadsheetconverter/',
     author='yamionp',
     author_email='yami@crimsondream.jp',
