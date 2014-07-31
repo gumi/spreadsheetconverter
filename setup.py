@@ -3,6 +3,7 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 import os
+
 from setuptools import setup, find_packages
 
 
@@ -12,8 +13,12 @@ try:
 except IOError:
     readme = ''
 
-# requirements
-install_requires = open('requirements.txt').read().splitlines()
+
+def _requires_from_file(filename):
+    return open(filename).read().splitlines()
+
+
+tests_require = _requires_from_file('test-requirements.txt')
 
 # version
 here = os.path.dirname(os.path.abspath(__file__))
@@ -36,7 +41,9 @@ setup(
     long_description=readme,
     license="MIT",
     packages=find_packages(),
-    install_requires=install_requires,
+    install_requires=_requires_from_file('requirements.txt'),
+    tests_require=tests_require,
+    extras_require={"testing": tests_require},
     classifiers=[
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
