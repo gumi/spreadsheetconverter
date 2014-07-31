@@ -28,7 +28,7 @@ def search_path(filename, path_env=None, recursive_env=None):
     :param path_env: 検索対象パスのはいった環境変数名
     :param recursive_env: 検索対象を再起検索するかが入った環境変数名
     """
-    search_paths = [os.getcwd()]
+    search_paths = []
     if path_env:
         search_path_env = os.environ.get(path_env)
         if search_path_env:
@@ -38,11 +38,13 @@ def search_path(filename, path_env=None, recursive_env=None):
     if search_path_env:
         search_paths += search_path_env.split(':')
 
+    if not search_paths:
+        search_paths.append(os.getcwd())
+
     recursive = bool(int(os.environ.get(recursive_env, False)))
 
     def _search_file(_path):
         abs_path = os.path.join(_path, filename)
-        print abs_path
         if os.path.exists(abs_path):
             return abs_path
 
