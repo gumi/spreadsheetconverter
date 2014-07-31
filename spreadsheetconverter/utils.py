@@ -42,15 +42,17 @@ def search_path(filename, path_env=None, recursive_env=None):
 
     def _search_file(_path):
         abs_path = os.path.join(_path, filename)
+        print abs_path
         if os.path.exists(abs_path):
             return abs_path
 
         if not recursive:
             return
 
-        for root, _dirs, _files in os.walk(_path):
-            for _dir in _dirs:
-                result = _search_file(os.path.join(root, _dir))
+        for name in os.listdir(_path):
+            path = os.path.join(_path, name)
+            if os.path.isdir(path):
+                result = _search_file(path)
                 if result:
                     return result
 
