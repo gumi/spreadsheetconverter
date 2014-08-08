@@ -8,7 +8,8 @@ import yaml
 
 from .loader import get_loader
 from .handler import get_handler
-from spreadsheetconverter.utils import search_path
+from .exceptions import TargetFieldDoesNotExist
+from .utils import search_path
 
 
 class Config(object):
@@ -126,6 +127,7 @@ class Config(object):
             if i == self.header_row_index:
                 # タイトル行
                 self.load_header_row(row)
+                self.check_header_row()
                 continue
 
             if i < self.data_start_row_index:
@@ -167,6 +169,15 @@ class Config(object):
     def load_header_row(self, row):
         for i, name in enumerate(row):
             self._column_name_index_map[i] = name
+
+    def check_header_row(self):
+        field_names = set(self._column_name_index_map.values())
+        target_field_names = set(self._fields.keys())
+        if not (target_field_names <= field_names):
+            raise TargetFieldDoesNotExist('{}: nothing fields: {}'.format(
+                self.name,
+                ', '.join(target_field_names - field_names),
+            ))
 
     def has_cache(self, target_fields=None):
         return False

@@ -1,9 +1,16 @@
 # -*- coding:utf-8 -*-
 from __future__ import absolute_import
 from __future__ import unicode_literals
+import pytest
 from spreadsheetconverter import Converter, YamlConfig
+from spreadsheetconverter.exceptions import TargetFieldDoesNotExist
 
 
 def test_convert():
-    converter = Converter(YamlConfig.get_config('user/user.yaml'))
-    converter.run()
+    Converter(YamlConfig.get_config('dummy1.yaml')).run()
+    Converter(YamlConfig.get_config('dummy2.yaml')).run()
+
+
+def test_nothing_field_convert_error():
+    with pytest.raises(TargetFieldDoesNotExist):
+        Converter(YamlConfig.get_config('nothing_field.yaml')).run()

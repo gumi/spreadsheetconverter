@@ -1,4 +1,4 @@
-target: "xls:///in.xlsx#都道府県"
+target: "xls:///sample.xlsx#都道府県"
 name: Preference
 row: 5
 handler:
@@ -18,7 +18,7 @@ fields:
   type: char
 
 - column: name_kana
-  name: "名前（かな）"
+  name: "なまえ"
   type: char
 
 - column: capital
