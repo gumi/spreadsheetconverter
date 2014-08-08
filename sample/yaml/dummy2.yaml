@@ -1,4 +1,4 @@
-target: "xls:///sample.xlsx#ダミーシート"
+target: "xls:///sample.xlsx#dummy2"
 row: 5
 limit: 10
 handler:
@@ -13,11 +13,6 @@ fields:
   validate:
     unique: true
 
-- column: country_code
-  name: "国籍"
-  type: char
-  default: "JP"
-
 - column: family_name
   name: "姓"
   type: char
@@ -25,10 +20,6 @@ fields:
 - column: first_name
   name: "名"
   type: char
-
-- column: birthday
-  name: "生年月日"
-  type: datetime
 
 - column: preference_id
   name: "出身地"
@@ -44,4 +35,4 @@ fields:
   relation:
     column: id
     from: 'country/preference.yaml'
-    key: name
+    key: name_kana
