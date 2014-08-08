@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 from __future__ import absolute_import
 from __future__ import unicode_literals
+from ...exceptions import ForeignkeyTargetDataDoesNotExistError
 from .base import BaseValueConverter
 
 
@@ -14,7 +15,12 @@ class ValueConverter(BaseValueConverter):
     def _to_python(self, value):
         converted = self.value_converter.to_python(value)
         if converted not in self.relation:
-            raise ValueError
+            raise ForeignkeyTargetDataDoesNotExistError(
+                '{} does not exist in {}'.format(
+                    value,
+                    self.settings['relation']['from'].name,
+                )
+            )
 
         return self.relation[converted]
 

@@ -8,7 +8,7 @@ import yaml
 
 from .loader import get_loader
 from .handler import get_handler
-from .exceptions import TargetFieldDoesNotExist
+from .exceptions import TargetFieldDoesNotExistError
 from .utils import search_path
 
 
@@ -174,7 +174,7 @@ class Config(object):
         field_names = set(self._column_name_index_map.values())
         target_field_names = set(self._fields.keys())
         if not (target_field_names <= field_names):
-            raise TargetFieldDoesNotExist('{}: nothing fields: {}'.format(
+            raise TargetFieldDoesNotExistError('{}: nothing fields: {}'.format(
                 self.name,
                 ', '.join(target_field_names - field_names),
             ))
