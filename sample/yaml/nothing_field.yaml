@@ -1,0 +1,19 @@
+target: "xls:///sample.xlsx#dummy1"
+row: 5
+limit: 10
+handler:
+  path: nothing_field.json
+  type: json
+  indent: 4
+  sort_keys: true
+fields:
+- column: id
+  name: "連番"
+  type: int
+  validate:
+    unique: true
+
+- column: country_code
+  name: "国籍2"
+  type: char
+  default: "JP"

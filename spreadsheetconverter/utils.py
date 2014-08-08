@@ -28,7 +28,7 @@ def search_path(filename, path_env=None, recursive_env=None):
     :param path_env: 検索対象パスのはいった環境変数名
     :param recursive_env: 検索対象を再起検索するかが入った環境変数名
     """
-    search_paths = [os.getcwd()]
+    search_paths = []
     if path_env:
         search_path_env = os.environ.get(path_env)
         if search_path_env:
@@ -37,6 +37,9 @@ def search_path(filename, path_env=None, recursive_env=None):
     search_path_env = os.environ.get('SSC_SEARCH_PATH')
     if search_path_env:
         search_paths += search_path_env.split(':')
+
+    if not search_paths:
+        search_paths.append(os.getcwd())
 
     recursive = bool(int(os.environ.get(recursive_env, False)))
 
@@ -48,9 +51,10 @@ def search_path(filename, path_env=None, recursive_env=None):
         if not recursive:
             return
 
-        for root, _dirs, _files in os.walk(_path):
-            for _dir in _dirs:
-                result = _search_file(os.path.join(root, _dir))
+        for name in os.listdir(_path):
+            path = os.path.join(_path, name)
+            if os.path.isdir(path):
+                result = _search_file(path)
                 if result:
                     return result
 
@@ -59,4 +63,4 @@ def search_path(filename, path_env=None, recursive_env=None):
         if path:
             return path
 
-    raise IOError('File does not exist.', filename)
+    raise IOError('File does not exist.', filename, search_paths, recursive)

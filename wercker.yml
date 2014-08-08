@@ -1,0 +1,23 @@
+box: wercker/python
+# Build definition
+build:
+  # The steps that will be executed on build
+  steps:
+    # A step that sets up the python virtual environment
+    - virtualenv:
+        name: setup virtual environment
+        install_wheel: false # Enable wheel to speed up builds (experimental)
+
+    - script:
+        name: echo information
+        code: |
+            echo "python version $(python --version) running!"
+            echo "from location $(which python)"
+            echo -p "packages: $(pip freeze)"
+    - script:
+        name: pip install testing
+        code: |
+            pip install -e .[testing]
+    - script:
+        name: Run pytest
+        code: py.test tests

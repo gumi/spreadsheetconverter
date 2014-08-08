@@ -96,7 +96,10 @@ class Book(BaseBook):
             if sheet.name == name:
                 return Sheet(sheet)
 
-        raise Exception()
+        raise ValueError('sheet does not exist {} in {}'.format(
+            name,
+            self._file_path,
+        ))
 
 
 class Sheet(BaseSheet):

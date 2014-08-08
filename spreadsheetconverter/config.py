@@ -2,13 +2,15 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 import codecs
+from collections import defaultdict
 
 import six
 import yaml
 
 from .loader import get_loader
 from .handler import get_handler
-from spreadsheetconverter.utils import search_path
+from .exceptions import TargetFieldDoesNotExistError
+from .utils import search_path
 
 
 class Config(object):
@@ -25,7 +27,7 @@ class Config(object):
 
         self._formatter = {}
         self._converter = {}
-        self._validator = {}
+        self._validator = defaultdict(dict)
 
         self._column_name_index_map = {}
 
@@ -96,12 +98,13 @@ class Config(object):
         self._formatter[item] = formatter
         return formatter
 
-    def get_validators(self, item):
-        if item in self._validator:
-            return self._validator[item]
+    def get_validators(self, item, target_fields=None):
+        target_field_key = self._get_cache_key(target_fields)
+        if item in self._validator[target_field_key]:
+            return self._validator[target_field_key][item]
 
         validators = self.loader.get_validators(self._fields_column[item])
-        self._validator[item] = validators
+        self._validator[target_field_key][item] = validators
         return validators
 
     def get_sheet(self):
@@ -126,6 +129,7 @@ class Config(object):
             if i == self.header_row_index:
                 # タイトル行
                 self.load_header_row(row)
+                self.check_header_row()
                 continue
 
             if i < self.data_start_row_index:
@@ -157,16 +161,30 @@ class Config(object):
             result[converter.fieldname] = converted
 
             # validate
-            validators = self.get_validators(converter.fieldname)
-            if validators:
-                for validator in validators:
-                    validator.validate(converted)
+            validators = self.get_validators(converter.fieldname,
+                                             target_fields=target_fields)
+            for validator in validators:
+                validator.validate(converted)
 
         return result
 
     def load_header_row(self, row):
         for i, name in enumerate(row):
             self._column_name_index_map[i] = name
+
+    def check_header_row(self):
+        field_names = set(self._column_name_index_map.values())
+        target_field_names = set(self._fields.keys())
+        if not (target_field_names <= field_names):
+            raise TargetFieldDoesNotExistError('{}: nothing fields: {}'.format(
+                self.name,
+                ', '.join(target_field_names - field_names),
+            ))
+
+    def _get_cache_key(self, target_fields):
+        if target_fields is None:
+            return 'None'
+        return ':'.join(sorted(target_fields))
 
     def has_cache(self, target_fields=None):
         return False

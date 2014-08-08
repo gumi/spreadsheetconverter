@@ -1,0 +1,38 @@
+target: "xls:///sample.xlsx#dummy2"
+row: 5
+limit: 10
+handler:
+  path: dummy2.json
+  type: json
+  indent: 4
+  sort_keys: true
+fields:
+- column: id
+  name: "連番"
+  type: int
+  validate:
+    unique: true
+
+- column: family_name
+  name: "姓"
+  type: char
+
+- column: first_name
+  name: "名"
+  type: char
+
+- column: preference_id
+  name: "出身地"
+  type: foreignkey
+  relation:
+    column: id
+    from: 'country/preference.yaml'
+    key: name
+
+- column: current_preference_id
+  name: "現住都道府県"
+  type: foreignkey
+  relation:
+    column: id
+    from: 'country/preference.yaml'
+    key: name_kana

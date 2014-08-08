@@ -1,0 +1,22 @@
+target: "xls:///sample.xlsx#nothing_foreignkey"
+row: 5
+limit: 10
+handler:
+  path: nothing_foreignkey.json
+  type: json
+  indent: 4
+  sort_keys: true
+fields:
+- column: id
+  name: "連番"
+  type: int
+  validate:
+    unique: true
+
+- column: preference_id
+  name: "出身地"
+  type: foreignkey
+  relation:
+    column: id
+    from: 'country/preference.yaml'
+    key: name

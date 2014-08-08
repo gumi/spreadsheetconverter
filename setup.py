@@ -2,6 +2,8 @@
 # -*- coding:utf-8 -*-
 from __future__ import absolute_import
 from __future__ import unicode_literals
+import os
+
 from setuptools import setup, find_packages
 
 
@@ -11,17 +13,25 @@ try:
 except IOError:
     readme = ''
 
-install_requires = [
-    'six >= 1.6',
-    'PyYAML>=3.11',
-    'xlrd >= 0.9.3',
-    'pytz',
-    'python-dateutil',
-]
+
+def _requires_from_file(filename):
+    return open(filename).read().splitlines()
+
+
+tests_require = _requires_from_file('test-requirements.txt')
+
+# version
+here = os.path.dirname(os.path.abspath(__file__))
+version = next((line.split('=')[1].strip().replace("'", '')
+                for line in open(os.path.join(here,
+                                              'spreadsheetconverter',
+                                              '__init__.py'))
+                if line.startswith('__version__ = ')),
+               '0.0.dev0')
 
 setup(
     name="SpreadsheetConverter",
-    version='0.0.15',
+    version=version,
     url='https://github.com/yamionp/spreadsheetconverter/',
     author='yamionp',
     author_email='yami@crimsondream.jp',
@@ -31,7 +41,9 @@ setup(
     long_description=readme,
     license="MIT",
     packages=find_packages(),
-    install_requires=install_requires,
+    install_requires=_requires_from_file('requirements.txt'),
+    tests_require=tests_require,
+    extras_require={"testing": tests_require},
     classifiers=[
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',

@@ -2,6 +2,12 @@
 SpreadsheetConverter
 ====================
 
+
+.. image:: https://app.wercker.com/status/95671e377f8c3da730c70f0cddd119a2/m
+   :alt: wercker status
+   :target: https://app.wercker.com/project/bykey/95671e377f8c3da730c70f0cddd119a2
+
+
 .. contents::
 ..
 
