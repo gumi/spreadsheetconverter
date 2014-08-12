@@ -5,4 +5,4 @@ from .config import Config, YamlConfig
 from .converter import Converter
 
 
-__version__ = '0.0.17'
+__version__ = '0.0.18'
