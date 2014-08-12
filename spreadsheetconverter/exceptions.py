@@ -7,5 +7,5 @@ class TargetFieldDoesNotExistError(Exception):
     pass
 
 
-class ForeignkeyTargetDataDoesNotExistError(Exception):
+class ForeignkeyTargetDataDoesNotExistError(ValueError):
     pass

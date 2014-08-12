@@ -6,8 +6,8 @@ from .base import BaseValueConverter
 
 
 class ValueConverter(BaseValueConverter):
-    def __init__(self, settings):
-        super(ValueConverter, self).__init__(settings)
+    def __init__(self, settings, **kwargs):
+        super(ValueConverter, self).__init__(settings, **kwargs)
         self._relation_data = {}
         self._converter = None
         self._value_converter = None
@@ -16,7 +16,9 @@ class ValueConverter(BaseValueConverter):
         converted = self.value_converter.to_python(value)
         if converted not in self.relation:
             raise ForeignkeyTargetDataDoesNotExistError(
-                '{} does not exist in {}'.format(
+                '{}[{}:"{}"] does not exist in "{}"'.format(
+                    self._config.name,
+                    self.settings['name'],
                     value,
                     self.settings['relation']['from'].name,
                 )
@@ -39,7 +41,8 @@ class ValueConverter(BaseValueConverter):
             return self._converter
 
         from spreadsheetconverter import Converter
-        self._converter = Converter(self.settings['relation']['from'])
+        self._converter = Converter(self.settings['relation']['from'],
+                                    indent=2)
         return self._converter
 
     @property
@@ -51,10 +54,7 @@ class ValueConverter(BaseValueConverter):
         if self._relation_data:
             return self._relation_data
 
-        for entity in self.converter.convert(target_fields=[
-            self.relation_field_to,
-            self.relation_field_from,
-        ]):
+        for entity in self.converter.convert():
             from_value = entity[self.relation_field_from]
             to_value = entity[self.relation_field_to]
             self._relation_data[from_value] = to_value
