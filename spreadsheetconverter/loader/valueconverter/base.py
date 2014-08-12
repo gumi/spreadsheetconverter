@@ -4,11 +4,13 @@ from __future__ import unicode_literals
 
 
 class BaseValueConverter(object):
-    def __init__(self, settings):
+    def __init__(self, settings, config=None):
         """
         :type settings: dict
+        :type config: Config
         """
         self.settings = settings
+        self._config = config
         self._has_default = 'default' in settings
         self._default = settings.get('default')
 
@@ -27,7 +29,7 @@ class BaseValueConverter(object):
         if self._has_default:
             return self._default
 
-        raise ValueError
+        raise ValueError('nothing default {}'.format(self.fieldname))
 
     @property
     def fieldname(self):

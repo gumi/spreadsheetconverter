@@ -10,8 +10,8 @@ from .base import BaseValueConverter
 
 
 class ValueConverter(BaseValueConverter):
-    def __init__(self, settings):
-        super(ValueConverter, self).__init__(settings)
+    def __init__(self, settings, **kwargs):
+        super(ValueConverter, self).__init__(settings, **kwargs)
 
         self._timezone = None
         _default_timezone = os.environ.get('SSC_TIMEZONE')

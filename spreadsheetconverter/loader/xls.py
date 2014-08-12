@@ -66,13 +66,13 @@ class Loader(BaseLoader):
     def get_sheet(self, name):
         return self._book.get_sheet(name)
 
-    def get_value_converter(self, setting):
+    def get_value_converter(self, setting, **kwargs):
         if setting['type'] == 'datetime':
             return XlsDatetimeValueConverter(setting, self._book.datemode)
         if setting['type'] == 'date':
             return XlsDateValueConverter(setting, self._book.datemode)
 
-        return super(Loader, self).get_value_converter(setting)
+        return super(Loader, self).get_value_converter(setting, **kwargs)
 
 
 class Book(BaseBook):

@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 from __future__ import absolute_import
 from __future__ import unicode_literals
+from __future__ import print_function
 import codecs
 from collections import defaultdict
 
@@ -14,13 +15,21 @@ from .utils import search_path
 
 
 class Config(object):
-    def __init__(self, rules):
+    def __init__(self, rules, target_fields=None):
         self.rules = rules
+        self.target_fields = target_fields
+
+        if target_fields:
+            fields = [field for field in self.rules['fields']
+                      if field['column'] in target_fields]
+        else:
+            fields = self.rules['fields']
+
         self._fields = {
-            field['name']: field for field in self.rules['fields']
+            field['name']: field for field in fields
         }
         self._fields_column = {
-            field['column']: field for field in self.rules['fields']
+            field['column']: field for field in fields
         }
         self._loader = None
         self._handler = None
@@ -83,7 +92,8 @@ class Config(object):
         if item in self._converter:
             return self._converter[item]
 
-        converter = self.loader.get_value_converter(self._fields[item])
+        converter = self.loader.get_value_converter(self._fields[item],
+                                                    config=self)
         self._converter[item] = converter
         return converter
 
@@ -98,13 +108,12 @@ class Config(object):
         self._formatter[item] = formatter
         return formatter
 
-    def get_validators(self, item, target_fields=None):
-        target_field_key = self._get_cache_key(target_fields)
-        if item in self._validator[target_field_key]:
-            return self._validator[target_field_key][item]
+    def get_validators(self, item):
+        if item in self._validator:
+            return self._validator[item]
 
         validators = self.loader.get_validators(self._fields_column[item])
-        self._validator[target_field_key][item] = validators
+        self._validator[item] = validators
         return validators
 
     def get_sheet(self):
@@ -121,7 +130,7 @@ class Config(object):
 
         self.handler.save(data)
 
-    def convert(self, sheet, target_fields=None):
+    def convert(self, sheet):
         _data = []
         # 処理行数
         count = 0
@@ -135,7 +144,14 @@ class Config(object):
             if i < self.data_start_row_index:
                 continue
 
-            _data.append(self.convert_column(row, target_fields=target_fields))
+            try:
+                _data.append(self.convert_column(row))
+            except ValueError as e:
+                print('Error row: [{}] {}'.format(
+                    ':'.join([six.text_type(v) for v in row]),
+                    e.message
+                ))
+                raise
 
             # 処理行数
             count += 1
@@ -144,7 +160,7 @@ class Config(object):
 
         return _data
 
-    def convert_column(self, row, target_fields=None):
+    def convert_column(self, row):
         result = {}
         for i, value in enumerate(row):
             converter = self.get_converter(
@@ -152,17 +168,12 @@ class Config(object):
             if not converter:
                 continue
 
-            if target_fields and converter.fieldname not in target_fields:
-                # 変換対象指定がある場合で対象外
-                continue
-
             # convert
             converted = converter.to_python(value)
             result[converter.fieldname] = converted
 
             # validate
-            validators = self.get_validators(converter.fieldname,
-                                             target_fields=target_fields)
+            validators = self.get_validators(converter.fieldname)
             for validator in validators:
                 validator.validate(converted)
 
@@ -181,15 +192,10 @@ class Config(object):
                 ', '.join(target_field_names - field_names),
             ))
 
-    def _get_cache_key(self, target_fields):
-        if target_fields is None:
-            return 'None'
-        return ':'.join(sorted(target_fields))
-
-    def has_cache(self, target_fields=None):
+    def has_cache(self):
         return False
 
-    def get_cache(self, target_fields=None):
+    def get_cache(self):
         raise NotImplementedError
 
 
@@ -197,11 +203,7 @@ YAML_CACHE = {}
 
 
 class YamlConfig(Config):
-    def __init__(self, yaml_path, load_context=None):
-        if load_context is None:
-            load_context = {}
-        load_context[yaml_path] = self
-
+    def __init__(self, yaml_path, target_fields=None):
         abs_yaml_path = search_path(
             yaml_path,
             path_env='SSC_YAML_SEARCH_PATH',
@@ -209,47 +211,53 @@ class YamlConfig(Config):
         f = codecs.open(abs_yaml_path, 'r', 'utf8').read()
         rules = yaml.load(f)
 
-        # relation指定のfromを再読み込み
-        for entity in rules['fields']:
-            if 'relation' in entity:
-                if isinstance(entity['relation']['from'], six.string_types):
-                    related_path = entity['relation']['from']
-                    if related_path not in load_context:
-                        entity['relation']['from'] = YamlConfig.get_config(
-                            related_path,
-                            load_context=load_context)
-                    else:
-                        entity['relation']['from'] = load_context[related_path]
-
-        super(YamlConfig, self).__init__(rules)
+        super(YamlConfig, self).__init__(rules, target_fields=target_fields)
 
         self.name = yaml_path
-        self._converted = {}
+        self._converted = None
 
     @classmethod
-    def get_config(cls, yaml_path, **kwargs):
-        if yaml_path in YAML_CACHE:
-            return YAML_CACHE[yaml_path]
+    def get_config(cls, yaml_path, target_fields=None, **kwargs):
+        cache_key = ':'.join([yaml_path] + (sorted(target_fields)
+                                            if target_fields else []))
+        if cache_key in YAML_CACHE:
+            return YAML_CACHE[cache_key]
 
-        YAML_CACHE[yaml_path] = cls(yaml_path, **kwargs)
-        return YAML_CACHE[yaml_path]
+        config = cls(yaml_path,
+                     target_fields=target_fields,
+                     **kwargs)
+        YAML_CACHE[cache_key] = config
+        config._load_relation_config()
+        return YAML_CACHE[cache_key]
 
-    def convert(self, sheet, target_fields=None):
-        _result = super(YamlConfig, self).convert(
-            sheet, target_fields=target_fields)
-        self._set_cache(target_fields, _result)
+    def _load_relation_config(self):
+        # relation指定のfromを再読み込み
+        for entity in self.rules['fields']:
+            if self.target_fields and entity['column'] in self.target_fields:
+                continue
+
+            if 'relation' not in entity:
+                continue
+
+            if isinstance(entity['relation']['from'], six.string_types):
+                related_path = entity['relation']['from']
+                entity['relation']['from'] = YamlConfig.get_config(
+                    related_path,
+                    target_fields=[
+                        entity['relation']['column'],
+                        entity['relation']['key'],
+                    ])
+
+    def convert(self, sheet):
+        _result = super(YamlConfig, self).convert(sheet)
+        self._set_cache(_result)
         return _result
 
-    def _get_cache_key(self, target_fields):
-        if target_fields is None:
-            return 'None'
-        return ':'.join(sorted(target_fields))
+    def has_cache(self):
+        return bool(self._converted)
 
-    def has_cache(self, target_fields=None):
-        return self._get_cache_key(target_fields) in self._converted
+    def get_cache(self):
+        return self._converted
 
-    def get_cache(self, target_fields=None):
-        return self._converted[self._get_cache_key(target_fields)]
-
-    def _set_cache(self, target_fields, data):
-        self._converted[self._get_cache_key(target_fields)] = data
+    def _set_cache(self, data):
+        self._converted = data

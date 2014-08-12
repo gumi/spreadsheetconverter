@@ -19,8 +19,8 @@ class BaseLoader(object):
     def get_sheet(self, name):
         raise NotImplementedError
 
-    def get_value_converter(self, setting):
-        return get_value_converter(setting)
+    def get_value_converter(self, setting, **kwargs):
+        return get_value_converter(setting, **kwargs)
 
     def get_validators(self, setting):
         return get_validators(setting)
