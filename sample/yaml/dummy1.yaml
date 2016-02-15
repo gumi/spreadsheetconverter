@@ -6,6 +6,11 @@ handler:
   type: json
   indent: 4
   sort_keys: true
+  inspect:
+  - column: current_preference_id
+    type: number_lte
+    value: 47
+
 fields:
 - column: id
   name: "連番"

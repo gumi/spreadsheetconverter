@@ -6,6 +6,7 @@ handler:
   type: json
   indent: 4
   sort_keys: true
+
 fields:
 - column: id
   name: "連番"

@@ -37,6 +37,7 @@ class Config(object):
         self._formatter = {}
         self._converter = {}
         self._validator = defaultdict(dict)
+        self._inspectors = None
 
         self._column_name_index_map = {}
 
@@ -128,6 +129,8 @@ class Config(object):
 
                 entity[key] = formatter.format(value)
 
+        self.inspect(data)
+
         self.handler.save(data)
 
     def convert(self, sheet):
@@ -197,6 +200,10 @@ class Config(object):
 
     def get_cache(self):
         raise NotImplementedError
+
+    def inspect(self, data):
+        for inspector in self._inspectors:
+            inspector.inspect(data)
 
 
 YAML_CACHE = {}
