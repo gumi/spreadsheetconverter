@@ -10,6 +10,7 @@ import yaml
 
 from .loader import get_loader
 from .handler import get_handler
+from .handler.inspector import get_inspectors
 from .exceptions import TargetFieldDoesNotExistError
 from .utils import search_path
 
@@ -58,6 +59,14 @@ class Config(object):
 
         self._handler = get_handler(self.rules['handler'], self)
         return self._handler
+
+    @property
+    def inspectors(self):
+        if self._inspectors:
+            return self._inspectors
+
+        self._inspectors = get_inspectors(self.rules['handler'])
+        return self._inspectors
 
     @property
     def header_row_index(self):
@@ -202,8 +211,9 @@ class Config(object):
         raise NotImplementedError
 
     def inspect(self, data):
-        for inspector in self._inspectors:
-            inspector.inspect(data)
+        for row in data:
+            for inspector in self.inspectors:
+                inspector.inspect(row)
 
 
 YAML_CACHE = {}

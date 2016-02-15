@@ -1,12 +1,15 @@
 # -*- coding:utf-8 -*-
 from __future__ import absolute_import
 from __future__ import unicode_literals
+
+import six
+
 from .base import BaseInspector
 
 
 class Inspector(BaseInspector):
-    def __init__(self, settings):
-        super(Inspector, self).__init__(settings)
+    def __init__(self, setting):
+        super(Inspector, self).__init__(setting)
 
     def inspect(self, data):
         """
@@ -18,4 +21,7 @@ class Inspector(BaseInspector):
         raise Exception('%s %s', self.target_fieldname, data)
 
     def get_compare_value(self, data):
-        return self.settings['value'].format(**data)
+        if isinstance(self.setting['value'], six.string_types):
+            return self.setting['value'].format(**data)
+
+        return self.setting['value']

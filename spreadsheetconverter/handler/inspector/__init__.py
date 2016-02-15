@@ -4,18 +4,17 @@ from __future__ import unicode_literals
 from spreadsheetconverter.utils import load_module
 
 
-def get_inspectors(setting):
+def get_inspectors(settings):
     """
-    :type setting: dict
+    :type settings: dict
     """
-    if 'inspect' not in setting:
+    if 'inspect' not in settings:
         return []
 
     inspectors = []
-    for inspector_name in setting['inspect'].keys():
-        loader_module = load_module(
-            'spreadsheetconverter.loader.inspector.{}',
-            inspector_name)
+    for setting in settings['inspect']:
+        loader_module = load_module('spreadsheetconverter.handler.inspector.{}',
+                                    setting['type'])
         inspectors.append(loader_module.Inspector(setting))
 
     return inspectors
