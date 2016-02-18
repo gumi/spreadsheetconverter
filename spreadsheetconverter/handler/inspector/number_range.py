@@ -10,7 +10,9 @@ class Inspector(BaseCompareNumberInspector):
         """
         :param data: row data
         """
-        if data[self.target_fieldname] <= self.get_compare_value(data):
+        max_value = self._get_formula_result(self.setting['max'], data)
+        min_value = self._get_formula_result(self.setting['min'], data)
+        if min_value <= data[self.target_fieldname] <= max_value:
             return
 
         raise Exception('%s %s', self.target_fieldname, data)

@@ -10,7 +10,7 @@ class Inspector(BaseCompareNumberInspector):
         """
         :param data: row data
         """
-        if data[self.target_fieldname] <= self.get_compare_value(data):
+        if data[self.target_fieldname] > self.get_compare_value(data):
             return
 
         raise Exception('%s %s', self.target_fieldname, data)

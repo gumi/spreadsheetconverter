@@ -65,7 +65,7 @@ class Config(object):
         if self._inspectors:
             return self._inspectors
 
-        self._inspectors = get_inspectors(self.rules['handler'])
+        self._inspectors = get_inspectors(self.rules['handler'], self.target_fields)
         return self._inspectors
 
     @property

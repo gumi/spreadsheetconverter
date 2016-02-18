@@ -9,7 +9,11 @@ handler:
   inspect:
   - column: current_preference_id
     type: number_lte
-    value: 47
+    value: "20 + 27"
+  - column: current_preference_id
+    type: number_range
+    max: 47
+    min: 1
 
 fields:
 - column: id
