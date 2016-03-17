@@ -6,6 +6,15 @@ handler:
   type: json
   indent: 4
   sort_keys: true
+  inspect:
+  - column: current_preference_id
+    type: number_lte
+    value: "20 + 27"
+  - column: current_preference_id
+    type: number_range
+    max: 47
+    min: 1
+
 fields:
 - column: id
   name: "連番"
