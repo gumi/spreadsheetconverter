@@ -40,7 +40,7 @@ Example
 ::
 
     $ cd sample
-    $ ssconvert user/user.yaml --yaml_search_path yaml --xls_search_path xls --json_base_path json
+    $ ssconvert country/preference.yaml --yaml_search_path yaml --xls_search_path xls --json_base_path json
 
 
 Copyright
