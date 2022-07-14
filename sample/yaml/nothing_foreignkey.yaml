@@ -1,4 +1,4 @@
-target: "xls:///sample.xlsx#nothing_foreignkey"
+target: "xls:///sample.xls#nothing_foreignkey"
 row: 5
 limit: 10
 handler:

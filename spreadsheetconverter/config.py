@@ -161,7 +161,7 @@ class Config(object):
             except ValueError as e:
                 print('Error row: [{}] {}'.format(
                     ':'.join([six.text_type(v) for v in row]),
-                    e.message
+                    str(e)
                 ))
                 raise
 
@@ -226,7 +226,7 @@ class YamlConfig(Config):
             path_env='SSC_YAML_SEARCH_PATH',
             recursive_env='SSC_YAML_SEARCH_RECURSIVE')
         f = codecs.open(abs_yaml_path, 'r', 'utf8').read()
-        rules = yaml.load(f)
+        rules = yaml.safe_load(f)
 
         super(YamlConfig, self).__init__(rules, target_fields=target_fields)
 

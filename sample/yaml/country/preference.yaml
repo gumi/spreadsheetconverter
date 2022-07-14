@@ -1,4 +1,4 @@
-target: "xls:///sample.xlsx#都道府県"
+target: "xls:///sample.xls#都道府県"
 name: Preference
 row: 5
 handler:

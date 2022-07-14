@@ -1,23 +1,23 @@
 [
     {
-        "current_preference_id": 37, 
-        "family_name": "\u3042\u3042\u3042", 
-        "first_name": "\u3057\u3057\u3057", 
-        "id": 1, 
+        "current_preference_id": 37,
+        "family_name": "\u3042\u3042\u3042",
+        "first_name": "\u3057\u3057\u3057",
+        "id": 1,
         "preference_id": 37
-    }, 
+    },
     {
-        "current_preference_id": 14, 
-        "family_name": "\u3044\u3044\u3044", 
-        "first_name": "\u3059\u3059\u3059", 
-        "id": 2, 
+        "current_preference_id": 14,
+        "family_name": "\u3044\u3044\u3044",
+        "first_name": "\u3059\u3059\u3059",
+        "id": 2,
         "preference_id": 15
-    }, 
+    },
     {
-        "current_preference_id": 13, 
-        "family_name": "\u3046\u3046\u3046", 
-        "first_name": "\u305b\u305b\u305b", 
-        "id": 3, 
+        "current_preference_id": 13,
+        "family_name": "\u3046\u3046\u3046",
+        "first_name": "\u305b\u305b\u305b",
+        "id": 3,
         "preference_id": 14
     }
 ]

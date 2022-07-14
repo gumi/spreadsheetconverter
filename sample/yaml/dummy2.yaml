@@ -1,4 +1,4 @@
-target: "xls:///sample.xlsx#dummy2"
+target: "xls:///sample.xls#dummy2"
 row: 5
 limit: 10
 handler:
