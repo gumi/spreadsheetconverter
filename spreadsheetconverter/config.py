@@ -161,7 +161,7 @@ class Config(object):
             except ValueError as e:
                 print('Error row: [{}] {}'.format(
                     ':'.join([six.text_type(v) for v in row]),
-                    e.message
+                    str(e)
                 ))
                 raise
 
