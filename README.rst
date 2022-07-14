@@ -2,7 +2,10 @@
 SpreadsheetConverter
 ====================
 
-[![test](https://github.com/gumi/spreadsheetconverter/actions/workflows/pytest-all.yml/badge.svg)](https://github.com/gumi/spreadsheetconverter/actions/workflows/pytest-all.yml)
+
+.. image:: https://github.com/gumi/spreadsheetconverter/actions/workflows/pytest-all.yml/badge.svg
+   :target: https://github.com/gumi/spreadsheetconverter/actions/workflows/pytest-all.yml
+
 
 .. contents::
 ..
