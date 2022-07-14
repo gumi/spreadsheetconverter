@@ -11,7 +11,7 @@ SpreadsheetConverter
 .. contents::
 ..
 
-ExcelファイルやCVSなどの表を別の形式に変換するためのものです。
+Excelファイル(.xls)やCVSなどの表を別の形式に変換するためのものです。
 以下の特徴をもっています
 
 - 変換ルールはyamlで定義可能
@@ -20,14 +20,14 @@ ExcelファイルやCVSなどの表を別の形式に変換するためのもの
 
 
 Requirements
-------------
+============
 
 * Python:
 
-  - CPython >= 2.7 or >= 3.3
+  - CPython >= 3.6
 
 Installation
-------------
+============
 
 The last stable release is available on PyPI and can be installed with ``pip``::
 
@@ -35,16 +35,25 @@ The last stable release is available on PyPI and can be installed with ``pip``::
 
 
 Example
--------
+=======
 
 ::
 
     $ cd sample
-    $ ssconvert user/user.yaml --yaml_search_path yaml --xls_search_path xls --json_base_path json
+    $ ssconvert country/preference.yaml --yaml_search_path yaml --xls_search_path xls --json_base_path json
+
+Release notes
+=============
+
+v0.2.0
+------
+
+* Python 2, 3.6 未満のサポート終了
+* xlrd の xlsx 非対応の影響で xlsx に非対応
 
 
 Copyright
----------
+=========
 
 - Copyright
-  - Copyright (C) 2015 gumi Inc.
+  - Copyright (C) 2015-2022 gumi Inc.

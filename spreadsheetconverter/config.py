@@ -10,6 +10,7 @@ import yaml
 
 from .loader import get_loader
 from .handler import get_handler
+from .handler.inspector import get_inspectors
 from .exceptions import TargetFieldDoesNotExistError
 from .utils import search_path
 
@@ -37,6 +38,7 @@ class Config(object):
         self._formatter = {}
         self._converter = {}
         self._validator = defaultdict(dict)
+        self._inspectors = None
 
         self._column_name_index_map = {}
 
@@ -57,6 +59,14 @@ class Config(object):
 
         self._handler = get_handler(self.rules['handler'], self)
         return self._handler
+
+    @property
+    def inspectors(self):
+        if self._inspectors:
+            return self._inspectors
+
+        self._inspectors = get_inspectors(self.rules['handler'], self.target_fields)
+        return self._inspectors
 
     @property
     def header_row_index(self):
@@ -128,6 +138,8 @@ class Config(object):
 
                 entity[key] = formatter.format(value)
 
+        self.inspect(data)
+
         self.handler.save(data)
 
     def convert(self, sheet):
@@ -149,7 +161,7 @@ class Config(object):
             except ValueError as e:
                 print('Error row: [{}] {}'.format(
                     ':'.join([six.text_type(v) for v in row]),
-                    e.message
+                    str(e)
                 ))
                 raise
 
@@ -198,6 +210,11 @@ class Config(object):
     def get_cache(self):
         raise NotImplementedError
 
+    def inspect(self, data):
+        for row in data:
+            for inspector in self.inspectors:
+                inspector.inspect(row)
+
 
 YAML_CACHE = {}
 
@@ -209,7 +226,7 @@ class YamlConfig(Config):
             path_env='SSC_YAML_SEARCH_PATH',
             recursive_env='SSC_YAML_SEARCH_RECURSIVE')
         f = codecs.open(abs_yaml_path, 'r', 'utf8').read()
-        rules = yaml.load(f)
+        rules = yaml.safe_load(f)
 
         super(YamlConfig, self).__init__(rules, target_fields=target_fields)
 
