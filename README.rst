@@ -44,6 +44,11 @@ Example
 Release notes
 =============
 
+v0.2.1
+------
+
+* PyYAML を 6.0.2 に更新し ssconvert インストール時のエラーを修正
+
 v0.2.0
 ------
 
