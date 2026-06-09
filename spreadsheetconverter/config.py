@@ -1,11 +1,6 @@
-# -*- coding:utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
-from __future__ import print_function
 import codecs
 from collections import defaultdict
 
-import six
 import yaml
 
 from .loader import get_loader
@@ -160,7 +155,7 @@ class Config(object):
                 _data.append(self.convert_column(row))
             except ValueError as e:
                 print('Error row: [{}] {}'.format(
-                    ':'.join([six.text_type(v) for v in row]),
+                    ':'.join([str(v) for v in row]),
                     str(e)
                 ))
                 raise
@@ -256,7 +251,7 @@ class YamlConfig(Config):
             if 'relation' not in entity:
                 continue
 
-            if isinstance(entity['relation']['from'], six.string_types):
+            if isinstance(entity['relation']['from'], str):
                 related_path = entity['relation']['from']
                 entity['relation']['from'] = YamlConfig.get_config(
                     related_path,

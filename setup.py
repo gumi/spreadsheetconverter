@@ -1,7 +1,4 @@
 #!/usr/bin/env python
-# -*- coding:utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 import os
 
 from setuptools import setup, find_packages
@@ -41,14 +38,16 @@ setup(
     long_description=readme,
     license="MIT",
     packages=find_packages(),
+    python_requires='>=3.10',
     install_requires=_requires_from_file('requirements.txt'),
     tests_require=tests_require,
     extras_require={"testing": tests_require},
     classifiers=[
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
         'Programming Language :: Python :: Implementation :: CPython',
         'License :: OSI Approved :: MIT License',
     ],

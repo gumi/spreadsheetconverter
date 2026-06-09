@@ -1,6 +1,3 @@
-# -*- coding:utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 from .valueconverter import get_value_converter
 from .validator import get_validators
 

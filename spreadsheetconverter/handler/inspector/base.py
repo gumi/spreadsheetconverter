@@ -1,10 +1,3 @@
-# -*- coding:utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
-
-import six
-
-
 class BaseInspector(object):
     def __init__(self, setting):
         self.setting = setting
@@ -22,7 +15,7 @@ class BaseCompareNumberInspector(BaseInspector):
         return self._get_formula_result(self.setting['value'], data)
 
     def _get_formula_result(self, formula, data):
-        if isinstance(formula, six.string_types):
+        if isinstance(formula, str):
             return eval(formula.format(**data))
 
         return formula
